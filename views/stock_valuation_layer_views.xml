@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="stock_valuation_layer_tree_backdate" model="ir.ui.view">
+        <field name="name">stock.valuation.layer.tree.backdate</field>
+        <field name="model">stock.valuation.layer</field>
+        <field name="inherit_id" ref="stock_account.stock_valuation_layer_tree"/>
+        <field name="arch" type="xml">
+            <field name="create_date" position="after">
+                <field name="mrp_recorded_at" optional="hide"/>
+            </field>
+        </field>
+    </record>
+    <record id="stock_valuation_layer_form_backdate" model="ir.ui.view">
+        <field name="name">stock.valuation.layer.form.backdate</field>
+        <field name="model">stock.valuation.layer</field>
+        <field name="inherit_id" ref="stock_account.stock_valuation_layer_form"/>
+        <field name="arch" type="xml">
+            <field name="create_date" position="after">
+                <field name="mrp_recorded_at" attrs="{'invisible': [('mrp_recorded_at', '=', False)]}"/>
+            </field>
+        </field>
+    </record>
+</odoo>

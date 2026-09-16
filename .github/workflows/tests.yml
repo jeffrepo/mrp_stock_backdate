@@ -1,0 +1,51 @@
+name: Odoo 15 integration tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: odoo
+          POSTGRES_PASSWORD: odoo
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install module and run integration tests
+        shell: bash
+        run: |
+          set -o pipefail
+          docker run --rm --network host \
+            -v "$GITHUB_WORKSPACE:/mnt/extra-addons/mrp_stock_backdate:ro" \
+            odoo:15.0 odoo \
+            --db_host=127.0.0.1 --db_port=5432 \
+            --db_user=odoo --db_password=odoo \
+            --database=mrp_backdate_test \
+            --init=mrp_stock_backdate --without-demo=all \
+            --test-enable --test-tags=/mrp_stock_backdate \
+            --stop-after-init --max-cron-threads=0 --http-port=8079 \
+            2>&1 | tee odoo-tests.log
+          grep -Eq 'mrp_stock_backdate: [1-9][0-9]* tests' odoo-tests.log
+      - name: Save Odoo log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: odoo-15-test-log
+          path: odoo-tests.log

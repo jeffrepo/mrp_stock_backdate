@@ -1,0 +1,24 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: mrp_stock_backdate
+#: model:ir.model.fields,field_description:mrp_stock_backdate.field_stock_valuation_layer__mrp_recorded_at
+msgid "Actually Recorded On"
+msgstr "Registrado realmente el"
+
+#. module: mrp_stock_backdate
+#: model:ir.model.fields,help:mrp_stock_backdate.field_stock_valuation_layer__mrp_recorded_at
+msgid "Original creation timestamp of a backdated manufacturing valuation."
+msgstr "Fecha y hora de creación original de una valoración de fabricación retroactiva."
+
+#. module: mrp_stock_backdate
+#: code:addons/mrp_stock_backdate/models/stock_move.py:0
+#, python-format
+msgid "Cannot validate manufacturing order %(order)s with inventory date %(date)s: the accounting period is locked through %(lock)s. Review the scheduled date or the company's lock dates."
+msgstr "No se puede validar la orden de fabricación %(order)s con fecha de inventario %(date)s: el período contable está bloqueado hasta el %(lock)s inclusive. Revise la fecha programada o las fechas de bloqueo de la compañía."

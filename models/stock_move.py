@@ -71,6 +71,12 @@ class StockMove(models.Model):
         for backdate, posted_moves in grouped.items():
             posted_moves.write({"date": backdate})
             posted_moves.move_line_ids.write({"date": backdate})
+            # MRP can create estimated analytic lines before validation. Odoo
+            # updates their amounts on completion, but keeps the initial date.
+            accounting_date = fields.Datetime.context_timestamp(
+                posted_moves, backdate,
+            ).date()
+            posted_moves.sudo().analytic_account_line_id.write({"date": accounting_date})
         # Do not leak this posting's dates into later valuation corrections.
         return done_moves.with_env(self.env)
 
@@ -84,12 +90,5 @@ class StockMove(models.Model):
         )
         accounting_date = self._get_mrp_accounting_date()
         if accounting_date and self.env["stock.valuation.layer"].browse(svl_id).quantity:
-            vals["date"] = accounting_date
-        return vals
-
-    def _generate_analytic_lines_data(self, unit_amount, amount):
-        vals = super()._generate_analytic_lines_data(unit_amount, amount)
-        accounting_date = self._get_mrp_accounting_date()
-        if accounting_date:
             vals["date"] = accounting_date
         return vals

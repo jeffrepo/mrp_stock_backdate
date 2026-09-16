@@ -42,7 +42,7 @@ jobs:
             --test-enable --test-tags=/mrp_stock_backdate \
             --stop-after-init --max-cron-threads=0 --http-port=8079 \
             2>&1 | tee odoo-tests.log
-          grep -Eq 'mrp_stock_backdate: [1-9][0-9]* tests' odoo-tests.log
+          grep -Eq '0 failed, 0 error\(s\) of [1-9][0-9]* tests' odoo-tests.log
       - name: Save Odoo log
         if: always()
         uses: actions/upload-artifact@v4

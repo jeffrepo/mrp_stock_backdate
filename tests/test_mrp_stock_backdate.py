@@ -4,11 +4,11 @@ from dateutil.relativedelta import relativedelta
 
 from odoo import fields
 from odoo.exceptions import UserError
-from odoo.tests import Form, SavepointCase, tagged
+from odoo.tests import Form, TransactionCase, tagged
 
 
 @tagged("post_install", "-at_install")
-class TestMrpStockBackdate(SavepointCase):
+class TestMrpStockBackdate(TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()

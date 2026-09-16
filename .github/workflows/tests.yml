@@ -22,7 +22,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U odoo -d postgres"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -32,9 +32,9 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          docker run --rm --network host \
+          docker run --rm --network host --entrypoint /usr/bin/odoo \
             -v "$GITHUB_WORKSPACE:/mnt/extra-addons/mrp_stock_backdate:ro" \
-            odoo:15.0 odoo \
+            odoo:15.0 \
             --db_host=127.0.0.1 --db_port=5432 \
             --db_user=odoo --db_password=odoo \
             --database=mrp_backdate_test \
